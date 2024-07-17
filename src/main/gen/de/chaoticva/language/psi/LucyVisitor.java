@@ -11,6 +11,10 @@ public class LucyVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitCondition(@NotNull LucyCondition o) {
+    visitPsiElement(o);
+  }
+
   public void visitDefCall(@NotNull LucyDefCall o) {
     visitPsiElement(o);
   }
@@ -24,6 +28,10 @@ public class LucyVisitor extends PsiElementVisitor {
   }
 
   public void visitFactor(@NotNull LucyFactor o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIfDef(@NotNull LucyIfDef o) {
     visitPsiElement(o);
   }
 

@@ -11,14 +11,14 @@ import static de.chaoticva.language.psi.LucyTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import de.chaoticva.language.psi.*;
 
-public class LucyScopeImpl extends ASTWrapperPsiElement implements LucyScope {
+public class LucyIfDefImpl extends ASTWrapperPsiElement implements LucyIfDef {
 
-  public LucyScopeImpl(@NotNull ASTNode node) {
+  public LucyIfDefImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LucyVisitor visitor) {
-    visitor.visitScope(this);
+    visitor.visitIfDef(this);
   }
 
   @Override
@@ -29,26 +29,20 @@ public class LucyScopeImpl extends ASTWrapperPsiElement implements LucyScope {
 
   @Override
   @NotNull
-  public List<LucyDefCall> getDefCallList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyDefCall.class);
+  public List<LucyCondition> getConditionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyCondition.class);
+  }
+
+  @Override
+  @Nullable
+  public LucyIfDef getIfDef() {
+    return findChildByClass(LucyIfDef.class);
   }
 
   @Override
   @NotNull
-  public List<LucyIfDef> getIfDefList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyIfDef.class);
-  }
-
-  @Override
-  @NotNull
-  public List<LucyReassign> getReassignList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyReassign.class);
-  }
-
-  @Override
-  @NotNull
-  public List<LucyVarDef> getVarDefList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyVarDef.class);
+  public List<LucyScope> getScopeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyScope.class);
   }
 
 }

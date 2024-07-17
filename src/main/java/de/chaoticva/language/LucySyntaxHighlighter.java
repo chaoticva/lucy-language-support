@@ -49,7 +49,9 @@ public class LucySyntaxHighlighter extends SyntaxHighlighterBase {
                 LucyTypes.PLUS,
                 LucyTypes.MINUS,
                 LucyTypes.ASTERISK,
-                LucyTypes.SLASH
+                LucyTypes.SLASH,
+                LucyTypes.AND,
+                LucyTypes.OR
         ).contains(tokenType)) return new TextAttributesKey[]{OPERATOR};
         if (Objects.equals(LucyTypes.COMMENT, tokenType)) return new TextAttributesKey[]{COMMENT};
         if (Objects.equals(LucyTypes.PARAMETER, tokenType)) return new TextAttributesKey[]{PARAMETER};
@@ -60,7 +62,12 @@ public class LucySyntaxHighlighter extends SyntaxHighlighterBase {
         if (List.of(LucyTypes.OPEN_BRACE, LucyTypes.CLOSE_BRACE).contains(tokenType)) return new TextAttributesKey[]{BRACES};
         if (Objects.equals(LucyTypes.NUMBER, tokenType)) return new TextAttributesKey[]{NUMBER};
         if (Objects.equals(LucyTypes.STRING, tokenType)) return new TextAttributesKey[]{STRING};
-        if (List.of(LucyTypes.VAR, LucyTypes.DEF).contains(tokenType)) return new TextAttributesKey[]{KEYWORD};
+        if (List.of(
+                LucyTypes.VAR,
+                LucyTypes.DEF,
+                LucyTypes.IF,
+                LucyTypes.ELSE
+        ).contains(tokenType)) return new TextAttributesKey[]{KEYWORD};
         if (Objects.equals(LucyTypes.IDENTIFIER, tokenType)) return new TextAttributesKey[]{IDENTIFIER};
         if (Objects.equals(TokenType.BAD_CHARACTER, tokenType)) return new TextAttributesKey[]{BAD_CHARACTER};
 

@@ -11,14 +11,14 @@ import static de.chaoticva.language.psi.LucyTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import de.chaoticva.language.psi.*;
 
-public class LucyScopeImpl extends ASTWrapperPsiElement implements LucyScope {
+public class LucyConditionImpl extends ASTWrapperPsiElement implements LucyCondition {
 
-  public LucyScopeImpl(@NotNull ASTNode node) {
+  public LucyConditionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LucyVisitor visitor) {
-    visitor.visitScope(this);
+    visitor.visitCondition(this);
   }
 
   @Override
@@ -29,26 +29,8 @@ public class LucyScopeImpl extends ASTWrapperPsiElement implements LucyScope {
 
   @Override
   @NotNull
-  public List<LucyDefCall> getDefCallList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyDefCall.class);
-  }
-
-  @Override
-  @NotNull
-  public List<LucyIfDef> getIfDefList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyIfDef.class);
-  }
-
-  @Override
-  @NotNull
-  public List<LucyReassign> getReassignList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyReassign.class);
-  }
-
-  @Override
-  @NotNull
-  public List<LucyVarDef> getVarDefList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyVarDef.class);
+  public LucyExpr getExpr() {
+    return findNotNullChildByClass(LucyExpr.class);
   }
 
 }

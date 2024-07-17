@@ -41,8 +41,12 @@ WHITE_SPACE=[\ \n\t\f]
       "="                     { return ASSIGN; }
       ","                     { return COMMA; }
       ":"                     { return COLON; }
+      "&&"                    { return AND; }
+      "||"                    { return OR; }
       "var"                   { return VAR; }
       "def"                   { return DEF; }
+      "if"                    { return IF; }
+      "else"                  { return ELSE; }
       true|false              { return BOOLEAN; }
       [A-Za-z][A-Za-z0-9_]*   { return IDENTIFIER; }
       [0-9]+                  { return NUMBER; }

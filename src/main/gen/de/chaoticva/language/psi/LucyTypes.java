@@ -9,10 +9,12 @@ import de.chaoticva.language.psi.impl.*;
 public interface LucyTypes {
 
   IElementType ARGUMENT = new LucyElementType("ARGUMENT");
+  IElementType CONDITION = new LucyElementType("CONDITION");
   IElementType DEF_CALL = new LucyElementType("DEF_CALL");
   IElementType DEF_DEF = new LucyElementType("DEF_DEF");
   IElementType EXPR = new LucyElementType("EXPR");
   IElementType FACTOR = new LucyElementType("FACTOR");
+  IElementType IF_DEF = new LucyElementType("IF_DEF");
   IElementType OPERATOR = new LucyElementType("OPERATOR");
   IElementType PARAMETER = new LucyElementType("PARAMETER");
   IElementType REASSIGN = new LucyElementType("REASSIGN");
@@ -20,6 +22,7 @@ public interface LucyTypes {
   IElementType TYPE = new LucyElementType("TYPE");
   IElementType VAR_DEF = new LucyElementType("VAR_DEF");
 
+  IElementType AND = new LucyTokenType("AND");
   IElementType ASSIGN = new LucyTokenType("ASSIGN");
   IElementType ASTERISK = new LucyTokenType("ASTERISK");
   IElementType BOOLEAN = new LucyTokenType("BOOLEAN");
@@ -30,9 +33,11 @@ public interface LucyTypes {
   IElementType COMMA = new LucyTokenType("COMMA");
   IElementType COMMENT = new LucyTokenType("COMMENT");
   IElementType DEF = new LucyTokenType("DEF");
+  IElementType ELSE = new LucyTokenType("ELSE");
   IElementType EQUAL = new LucyTokenType("EQUAL");
   IElementType GTE = new LucyTokenType("GTE");
   IElementType IDENTIFIER = new LucyTokenType("IDENTIFIER");
+  IElementType IF = new LucyTokenType("IF");
   IElementType LTE = new LucyTokenType("LTE");
   IElementType MINUS = new LucyTokenType("MINUS");
   IElementType NOT_EQUAL = new LucyTokenType("NOT_EQUAL");
@@ -40,6 +45,7 @@ public interface LucyTypes {
   IElementType OPEN_ANGLE = new LucyTokenType("OPEN_ANGLE");
   IElementType OPEN_BRACE = new LucyTokenType("OPEN_BRACE");
   IElementType OPEN_PAREN = new LucyTokenType("OPEN_PAREN");
+  IElementType OR = new LucyTokenType("OR");
   IElementType PLUS = new LucyTokenType("PLUS");
   IElementType SEMI = new LucyTokenType("SEMI");
   IElementType SLASH = new LucyTokenType("SLASH");
@@ -52,6 +58,9 @@ public interface LucyTypes {
       if (type == ARGUMENT) {
         return new LucyArgumentImpl(node);
       }
+      else if (type == CONDITION) {
+        return new LucyConditionImpl(node);
+      }
       else if (type == DEF_CALL) {
         return new LucyDefCallImpl(node);
       }
@@ -63,6 +72,9 @@ public interface LucyTypes {
       }
       else if (type == FACTOR) {
         return new LucyFactorImpl(node);
+      }
+      else if (type == IF_DEF) {
+        return new LucyIfDefImpl(node);
       }
       else if (type == OPERATOR) {
         return new LucyOperatorImpl(node);

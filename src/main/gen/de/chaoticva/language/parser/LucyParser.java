@@ -47,6 +47,17 @@ public class LucyParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // expr
+  public static boolean condition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "condition")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, CONDITION, "<condition>");
+    r = expr(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // IDENTIFIER OPEN_PAREN (argument (COMMA argument)*)? CLOSE_PAREN
   public static boolean defCall(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "defCall")) return false;
@@ -235,7 +246,99 @@ public class LucyParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (COMMENT|(varDef SEMI)|defDef|(OPEN_BRACE scope CLOSE_BRACE)|(defCall SEMI)|(reassign SEMI))*
+  // IF OPEN_PAREN condition (OR|AND condition)* CLOSE_PAREN OPEN_BRACE scope CLOSE_BRACE (ELSE (ifDef|OPEN_BRACE scope CLOSE_BRACE))?
+  public static boolean ifDef(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifDef")) return false;
+    if (!nextTokenIs(b, IF)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, IF, OPEN_PAREN);
+    r = r && condition(b, l + 1);
+    r = r && ifDef_3(b, l + 1);
+    r = r && consumeTokens(b, 0, CLOSE_PAREN, OPEN_BRACE);
+    r = r && scope(b, l + 1);
+    r = r && consumeToken(b, CLOSE_BRACE);
+    r = r && ifDef_8(b, l + 1);
+    exit_section_(b, m, IF_DEF, r);
+    return r;
+  }
+
+  // (OR|AND condition)*
+  private static boolean ifDef_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifDef_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!ifDef_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ifDef_3", c)) break;
+    }
+    return true;
+  }
+
+  // OR|AND condition
+  private static boolean ifDef_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifDef_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OR);
+    if (!r) r = ifDef_3_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // AND condition
+  private static boolean ifDef_3_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifDef_3_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, AND);
+    r = r && condition(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (ELSE (ifDef|OPEN_BRACE scope CLOSE_BRACE))?
+  private static boolean ifDef_8(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifDef_8")) return false;
+    ifDef_8_0(b, l + 1);
+    return true;
+  }
+
+  // ELSE (ifDef|OPEN_BRACE scope CLOSE_BRACE)
+  private static boolean ifDef_8_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifDef_8_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ELSE);
+    r = r && ifDef_8_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ifDef|OPEN_BRACE scope CLOSE_BRACE
+  private static boolean ifDef_8_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifDef_8_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ifDef(b, l + 1);
+    if (!r) r = ifDef_8_0_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // OPEN_BRACE scope CLOSE_BRACE
+  private static boolean ifDef_8_0_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifDef_8_0_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OPEN_BRACE);
+    r = r && scope(b, l + 1);
+    r = r && consumeToken(b, CLOSE_BRACE);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (COMMENT|(varDef SEMI)|defDef|(OPEN_BRACE scope CLOSE_BRACE)|(defCall SEMI)|(reassign SEMI)|ifDef)*
   static boolean lucyFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "lucyFile")) return false;
     while (true) {
@@ -246,7 +349,7 @@ public class LucyParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COMMENT|(varDef SEMI)|defDef|(OPEN_BRACE scope CLOSE_BRACE)|(defCall SEMI)|(reassign SEMI)
+  // COMMENT|(varDef SEMI)|defDef|(OPEN_BRACE scope CLOSE_BRACE)|(defCall SEMI)|(reassign SEMI)|ifDef
   private static boolean lucyFile_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "lucyFile_0")) return false;
     boolean r;
@@ -257,6 +360,7 @@ public class LucyParser implements PsiParser, LightPsiParser {
     if (!r) r = lucyFile_0_3(b, l + 1);
     if (!r) r = lucyFile_0_4(b, l + 1);
     if (!r) r = lucyFile_0_5(b, l + 1);
+    if (!r) r = ifDef(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -360,7 +464,7 @@ public class LucyParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (COMMENT|(varDef SEMI)|(defCall SEMI)|(reassign SEMI))*
+  // (COMMENT|(varDef SEMI)|(defCall SEMI)|(reassign SEMI)|ifDef)*
   public static boolean scope(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "scope")) return false;
     Marker m = enter_section_(b, l, _NONE_, SCOPE, "<scope>");
@@ -373,7 +477,7 @@ public class LucyParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COMMENT|(varDef SEMI)|(defCall SEMI)|(reassign SEMI)
+  // COMMENT|(varDef SEMI)|(defCall SEMI)|(reassign SEMI)|ifDef
   private static boolean scope_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "scope_0")) return false;
     boolean r;
@@ -382,6 +486,7 @@ public class LucyParser implements PsiParser, LightPsiParser {
     if (!r) r = scope_0_1(b, l + 1);
     if (!r) r = scope_0_2(b, l + 1);
     if (!r) r = scope_0_3(b, l + 1);
+    if (!r) r = ifDef(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

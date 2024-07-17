@@ -5,18 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LucyScope extends PsiElement {
+public interface LucyIfDef extends PsiElement {
 
   @NotNull
-  List<LucyDefCall> getDefCallList();
+  List<LucyCondition> getConditionList();
+
+  @Nullable
+  LucyIfDef getIfDef();
 
   @NotNull
-  List<LucyIfDef> getIfDefList();
-
-  @NotNull
-  List<LucyReassign> getReassignList();
-
-  @NotNull
-  List<LucyVarDef> getVarDefList();
+  List<LucyScope> getScopeList();
 
 }

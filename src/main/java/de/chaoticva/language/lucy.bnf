@@ -15,7 +15,7 @@
   psiImplUtilClass="de.chaoticva.language.psi.impl.LucyPsiImplUtil"
 }
 
-lucyFile ::= (COMMENT|(varDef SEMI)|defDef|(OPEN_BRACE scope CLOSE_BRACE)|(defCall SEMI)|(reassign SEMI))*
+lucyFile ::= (COMMENT|(varDef SEMI)|defDef|(OPEN_BRACE scope CLOSE_BRACE)|(defCall SEMI)|(reassign SEMI)|ifDef)*
 
 varDef ::= VAR IDENTIFIER type? ASSIGN expr {
     mixin="de.chaoticva.language.psi.impl.LucyNamedElementImpl"
@@ -41,10 +41,14 @@ parameter ::= IDENTIFIER type? {
 
 type ::= COLON IDENTIFIER
 
-scope ::= (COMMENT|(varDef SEMI)|(defCall SEMI)|(reassign SEMI))*
+scope ::= (COMMENT|(varDef SEMI)|(defCall SEMI)|(reassign SEMI)|ifDef)*
 
 defCall ::= IDENTIFIER OPEN_PAREN (argument (COMMA argument)*)? CLOSE_PAREN
 
 argument ::= expr
 
 reassign ::= IDENTIFIER ASSIGN expr
+
+ifDef ::= IF OPEN_PAREN condition (OR|AND condition)* CLOSE_PAREN OPEN_BRACE scope CLOSE_BRACE (ELSE (ifDef|OPEN_BRACE scope CLOSE_BRACE))?
+
+condition ::= expr
