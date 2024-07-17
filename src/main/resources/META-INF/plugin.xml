@@ -1,0 +1,28 @@
+<idea-plugin>
+    <id>de.chaoticva.lucy-language-support</id>
+    <name>Lucy-Language-Support</name>
+    <vendor email="support@localhost" url="http://localhost:3000">chaoticva</vendor>
+    <description><![CDATA[
+- Adds Syntax Highlighting<br>
+- Adds error Checking
+]]></description>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="Lucy Class File" implementationClass="de.chaoticva.language.LucyFileType" fieldName="INSTANCE" language="Lucy" extensions="lc"/>
+        <lang.parserDefinition language="Lucy" implementationClass="de.chaoticva.language.LucyParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="Lucy" implementationClass="de.chaoticva.language.LucySyntaxHighlighterFactory"/>
+        <annotator language="Lucy" implementationClass="de.chaoticva.language.LucyAnnotator"/>
+        <codeInsight.lineMarkerProvider language="Lucy" implementationClass="de.chaoticva.language.LucyLineMarkerProvider"/>
+        <completion.contributor language="Lucy" implementationClass="de.chaoticva.language.LucyCompletionContributor"/>
+        <lang.foldingBuilder language="Lucy" implementationClass="de.chaoticva.language.SimpleFoldingBuilder"/>
+        <navbar implementation="de.chaoticva.language.LucyStructureAwareNavbar"/>
+        <lang.documentationProvider language="Lucy" implementationClass="de.chaoticva.language.LucyDocumentationProvider"/>
+        <lang.commenter language="Lucy" implementationClass="de.chaoticva.language.LucyCommenter" />
+
+        <newProjectWizard.language implementation="de.chaoticva.project.wizard.LucyWizard"/>
+    </extensions>
+    <applicationListeners>
+        <listener class="de.chaoticva.project.LucyPluginComponent" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
+</idea-plugin>
