@@ -39,4 +39,16 @@ public class LucyFactorImpl extends ASTWrapperPsiElement implements LucyFactor {
     return findChildByClass(LucyExpr.class);
   }
 
+  @Override
+  @Nullable
+  public LucyIdentifier getIdentifier() {
+    return findChildByClass(LucyIdentifier.class);
+  }
+
+  @Override
+  @Nullable
+  public LucyInstanceDef getInstanceDef() {
+    return findChildByClass(LucyInstanceDef.class);
+  }
+
 }

@@ -5,14 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LucyReassign extends PsiElement {
-
-  @NotNull
-  LucyExpr getExpr();
-
-  @NotNull
-  LucyIdentifier getIdentifier();
-
-  String getName();
+public interface LucyIdentifier extends PsiElement {
 
 }

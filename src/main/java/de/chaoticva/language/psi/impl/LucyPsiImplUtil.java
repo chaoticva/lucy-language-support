@@ -2,6 +2,7 @@ package de.chaoticva.language.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import de.chaoticva.language.LucyUtil;
 import de.chaoticva.language.psi.*;
 
 public class LucyPsiImplUtil {
@@ -11,10 +12,38 @@ public class LucyPsiImplUtil {
         return identifierNode.getText();
     }
 
-    public static String getTypeText(LucyVarDef el) {
-        ASTNode typeNode = el.getNode().findChildByType(LucyTypes.TYPE);
-        if (typeNode == null) return "any";
-        return typeNode.getText().split(":")[1].trim();
+    public static String getName(LucyDefCall el) {
+        ASTNode identifierNode = el.getNode().findChildByType(LucyTypes.IDENTIFIER);
+        if (identifierNode == null) return null;
+        return identifierNode.getText();
+    }
+
+    public static String getName(LucyReassign el) {
+        ASTNode identifierNode = el.getNode().findChildByType(LucyTypes.IDENTIFIER);
+        if (identifierNode == null) return null;
+        return identifierNode.getText();
+    }
+
+    public static boolean isConst(LucyVarDef el) {
+        ASTNode constNode = el.getNode().findChildByType(LucyTypes.CONST);
+        return constNode != null;
+    }
+
+    public static boolean isConst(LucyParameter el) {
+        ASTNode constNode = el.getNode().findChildByType(LucyTypes.CONST);
+        return constNode != null;
+    }
+
+    public static PsiElement getNameEl(LucyVarDef el) {
+        ASTNode identifierNode = el.getNode().findChildByType(LucyTypes.IDENTIFIER);
+        if (identifierNode == null) return null;
+        return identifierNode.getPsi();
+    }
+
+    public static PsiElement getNameEl(LucyParameter el) {
+        ASTNode identifierNode = el.getNode().findChildByType(LucyTypes.IDENTIFIER);
+        if (identifierNode == null) return null;
+        return identifierNode.getPsi();
     }
 
     public static String getValue(LucyVarDef el) {
@@ -38,17 +67,32 @@ public class LucyPsiImplUtil {
         return null;
     }
 
-    public static PsiElement setName(LucyVarDef el, String newName) {
-        ASTNode identifierNode = el.getNode().findChildByType(LucyTypes.IDENTIFIER);
-        if (identifierNode == null) return el;
-        LucyVarDef varDef = LucyElementFactory.createVarDef(el.getProject(), newName);
-        ASTNode newKeyNode = varDef.getFirstChild().getNode();
-        el.getNode().replaceChild(identifierNode, newKeyNode);
-
-        return el;
+    public static String getType(LucyExpr el) {
+        ASTNode factorNode = el.getNode().findChildByType(LucyTypes.FACTOR);
+        if (factorNode == null) return null;
+        return getType((LucyFactor) factorNode.getPsi());
     }
 
-    public static PsiElement getNameIdentifier(LucyVarDef element) {
+    public static String getType(LucyFactor el) {
+        ASTNode stringNode = el.getNode().findChildByType(LucyTypes.STRING);
+        ASTNode charNode = el.getNode().findChildByType(LucyTypes.CHAR);
+        ASTNode numberNode = el.getNode().findChildByType(LucyTypes.NUMBER);
+        ASTNode booleanNode = el.getNode().findChildByType(LucyTypes.BOOLEAN);
+        ASTNode defCallNode = el.getNode().findChildByType(LucyTypes.DEF_CALL);
+        ASTNode identifierNode = el.getNode().findChildByType(LucyTypes.IDENTIFIER);
+        ASTNode newNode = el.getNode().findChildByType(LucyTypes.INSTANCE_DEF);
+        if (stringNode != null) return "str";
+        if (numberNode != null) return "num";
+        if (charNode != null) return "char";
+        if (booleanNode != null) return "bool";
+        if (defCallNode != null) return LucyUtil.getDeclaration((LucyDefCall) defCallNode.getPsi()).getType().getText();
+        if (identifierNode != null) return LucyUtil.getDeclaration(identifierNode.getPsi()).getType().getText();
+        if (newNode != null) return ((LucyInstanceDef) newNode.getPsi()).getIdentifier().getText().split("\\(")[0];
+
+        return null;
+    }
+
+    public static PsiElement getNameIdentifier(LucyDefDef element) {
         ASTNode keyNode = element.getNode().findChildByType(LucyTypes.IDENTIFIER);
         return keyNode != null ? keyNode.getPsi() : null;
     }
@@ -59,21 +103,9 @@ public class LucyPsiImplUtil {
         return identifierNode.getText();
     }
 
-    public static String getTypeText(LucyDefDef el) {
-        ASTNode typeNode = el.getNode().findChildByType(LucyTypes.TYPE);
-        if (typeNode == null) return "void";
-        return typeNode.getText().split(":")[1].trim();
-    }
-
     public static String getName(LucyParameter el) {
         ASTNode identifierNode = el.getNode().findChildByType(LucyTypes.IDENTIFIER);
         if (identifierNode == null) return null;
         return identifierNode.getText();
-    }
-
-    public static String getTypeText(LucyParameter el) {
-        ASTNode typeNode = el.getNode().findChildByType(LucyTypes.TYPE);
-        if (typeNode == null) return "any";
-        return typeNode.getText().split(":")[1].trim();
     }
 }

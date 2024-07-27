@@ -7,14 +7,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.presentation.java.SymbolPresentationUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.chaoticva.language.psi.LucyDefDef;
-import de.chaoticva.language.psi.LucyParameter;
-import de.chaoticva.language.psi.LucyVarDef;
+import de.chaoticva.language.psi.*;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 final class LucyDocumentationProvider extends AbstractDocumentationProvider {
     @Override
@@ -22,21 +18,22 @@ final class LucyDocumentationProvider extends AbstractDocumentationProvider {
         final String file = SymbolPresentationUtil.getFilePathPresentation(element.getContainingFile());
         if (element instanceof LucyVarDef varDef) {
             final String name = varDef.getName();
-            final String type = varDef.getTypeText();
+            final boolean isConst = varDef.isConst();
+            final String type = varDef.getType().getText();
 
-            return renderVarDefDoc(name, type, file);
+            return renderVarDefDoc(name, isConst, type, file);
         }
         if (element instanceof LucyDefDef defDef) {
             final String name = defDef.getName();
             StringBuilder parameters = new StringBuilder("(");
             for (LucyParameter parameter : defDef.getParameterList()) {
-                parameters.append("%s: %s, ".formatted(parameter.getName(), parameter.getTypeText()));
+                parameters.append("%s%s %s, ".formatted(parameter.isConst() ? "const " : "", parameter.getType().getText(), parameter.getName()));
             }
 
             String parameterText = parameters.length() != 1 ? parameters.substring(0, parameters.length() - 2) : "(";
             parameterText += ")";
-            final String type = defDef.getTypeText();
-            return renderDefDefDoc(name, parameterText, type,  file);
+            final String type = defDef.getType().getText();
+            return renderDefDefDoc(name, parameterText, type, file);
         }
 
         return null;
@@ -57,13 +54,13 @@ final class LucyDocumentationProvider extends AbstractDocumentationProvider {
         return null;
     }
 
-    private String renderVarDefDoc(String name, String type, String file) {
+    private String renderVarDefDoc(String name, boolean isConst, String type, String file) {
         StringBuilder sb = new StringBuilder();
         sb.append(DocumentationMarkup.DEFINITION_START);
-        sb.append("var %s: %s".formatted(name, type));
+        sb.append("%svar %s %s".formatted(isConst ? "const " : "", type, name));
         sb.append(DocumentationMarkup.DEFINITION_END);
         sb.append(DocumentationMarkup.SECTIONS_START);
-        addKeyValueSection("File:", file, sb);
+        addKeyValueSection(file, sb);
         sb.append(DocumentationMarkup.SECTIONS_END);
         return sb.toString();
     }
@@ -71,17 +68,17 @@ final class LucyDocumentationProvider extends AbstractDocumentationProvider {
     private String renderDefDefDoc(String name, String parameters, String type, String file) {
         StringBuilder sb = new StringBuilder();
         sb.append(DocumentationMarkup.DEFINITION_START);
-        sb.append("def %s%s: %s".formatted(name, parameters, type));
+        sb.append("def %s %s%s".formatted(name, type, parameters));
         sb.append(DocumentationMarkup.DEFINITION_END);
         sb.append(DocumentationMarkup.SECTIONS_START);
-        addKeyValueSection("File:", file, sb);
+        addKeyValueSection(file, sb);
         sb.append(DocumentationMarkup.SECTIONS_END);
         return sb.toString();
     }
 
-    private void addKeyValueSection(String key, String value, StringBuilder sb) {
+    private void addKeyValueSection(String value, StringBuilder sb) {
         sb.append(DocumentationMarkup.SECTION_HEADER_START);
-        sb.append(key);
+        sb.append("File:");
         sb.append(DocumentationMarkup.SECTION_SEPARATOR);
         sb.append("<p>");
         sb.append(value);

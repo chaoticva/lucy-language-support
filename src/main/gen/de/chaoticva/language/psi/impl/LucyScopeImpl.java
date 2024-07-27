@@ -41,6 +41,12 @@ public class LucyScopeImpl extends ASTWrapperPsiElement implements LucyScope {
 
   @Override
   @NotNull
+  public List<LucyInstanceDef> getInstanceDefList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyInstanceDef.class);
+  }
+
+  @Override
+  @NotNull
   public List<LucyReassign> getReassignList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyReassign.class);
   }

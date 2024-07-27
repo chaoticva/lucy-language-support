@@ -15,4 +15,6 @@ public interface LucyExpr extends PsiElement {
 
   String getValue();
 
+  String getType();
+
 }

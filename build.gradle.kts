@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "de.chaoticva"
-version = "0.2"
+version = "0.4"
 
 repositories {
     mavenCentral()

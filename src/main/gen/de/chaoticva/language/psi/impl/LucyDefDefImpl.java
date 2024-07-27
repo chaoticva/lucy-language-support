@@ -29,6 +29,12 @@ public class LucyDefDefImpl extends ASTWrapperPsiElement implements LucyDefDef {
 
   @Override
   @NotNull
+  public LucyIdentifier getIdentifier() {
+    return findNotNullChildByClass(LucyIdentifier.class);
+  }
+
+  @Override
+  @NotNull
   public List<LucyParameter> getParameterList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyParameter.class);
   }
@@ -40,9 +46,9 @@ public class LucyDefDefImpl extends ASTWrapperPsiElement implements LucyDefDef {
   }
 
   @Override
-  @Nullable
+  @NotNull
   public LucyType getType() {
-    return findChildByClass(LucyType.class);
+    return findNotNullChildByClass(LucyType.class);
   }
 
   @Override
@@ -51,8 +57,8 @@ public class LucyDefDefImpl extends ASTWrapperPsiElement implements LucyDefDef {
   }
 
   @Override
-  public String getTypeText() {
-    return LucyPsiImplUtil.getTypeText(this);
+  public PsiElement getNameIdentifier() {
+    return LucyPsiImplUtil.getNameIdentifier(this);
   }
 
 }

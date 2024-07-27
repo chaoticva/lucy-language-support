@@ -5,18 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LucyParameter extends PsiElement {
+public interface LucyInstanceDef extends PsiElement {
+
+  @NotNull
+  List<LucyArgument> getArgumentList();
 
   @NotNull
   LucyIdentifier getIdentifier();
-
-  @NotNull
-  LucyType getType();
-
-  String getName();
-
-  PsiElement getNameEl();
-
-  boolean isConst();
 
 }

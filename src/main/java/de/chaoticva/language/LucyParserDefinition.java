@@ -36,7 +36,7 @@ final class LucyParserDefinition implements ParserDefinition {
 
     @Override
     public @NotNull TokenSet getCommentTokens() {
-        return TokenSet.EMPTY;
+        return LucyTokenSets.COMMENTS;
     }
 
     @Override

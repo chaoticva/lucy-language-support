@@ -7,4 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface LucyType extends PsiElement {
 
+  @NotNull
+  LucyIdentifier getIdentifier();
+
 }

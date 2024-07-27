@@ -44,4 +44,9 @@ public class LucyExprImpl extends ASTWrapperPsiElement implements LucyExpr {
     return LucyPsiImplUtil.getValue(this);
   }
 
+  @Override
+  public String getType() {
+    return LucyPsiImplUtil.getType(this);
+  }
+
 }

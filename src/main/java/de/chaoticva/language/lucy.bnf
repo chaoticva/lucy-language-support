@@ -15,39 +15,45 @@
   psiImplUtilClass="de.chaoticva.language.psi.impl.LucyPsiImplUtil"
 }
 
-lucyFile ::= (COMMENT|(varDef SEMI)|defDef|(OPEN_BRACE scope CLOSE_BRACE)|(defCall SEMI)|(reassign SEMI)|ifDef)*
+lucyFile ::= (COMMENT|(varDef SEMI)|defDef|(OPEN_BRACE scope CLOSE_BRACE)|(defCall SEMI)|(reassign SEMI)|ifDef|instanceDef)*
 
-varDef ::= VAR IDENTIFIER type? ASSIGN expr {
-    mixin="de.chaoticva.language.psi.impl.LucyNamedElementImpl"
-    implements="de.chaoticva.language.psi.LucyNamedElement"
-    methods=[getName getTypeText getValue setName getNameIdentifier]
+instanceDef ::= NEW identifier (OPEN_PAREN (argument (COMMA argument)*)? CLOSE_PAREN)?
+
+varDef ::= CONST? VAR type identifier ASSIGN expr {
+    methods=[getName getNameEl getValue isConst]
 }
+
+identifier ::= IDENTIFIER_
 
 expr ::= factor ((operator factor)*)? {
-    methods=[getValue]
+    methods=[getValue getType]
 }
 
-factor ::= NUMBER|STRING|BOOLEAN|OPEN_PAREN expr CLOSE_PAREN|defCall|IDENTIFIER
+factor ::= NUMBER|STRING|CHAR|BOOLEAN|OPEN_PAREN expr CLOSE_PAREN|defCall|identifier|instanceDef
 
 operator ::= PLUS|MINUS|ASTERISK|SLASH|EQUAL|NOT_EQUAL|LTE|GTE|OPEN_ANGLE|CLOSE_ANGLE
 
-defDef ::= DEF IDENTIFIER OPEN_PAREN (parameter (COMMA parameter)*)? CLOSE_PAREN type? OPEN_BRACE scope CLOSE_BRACE {
-    methods=[getName getTypeText]
+defDef ::= DEF type identifier OPEN_PAREN (parameter (COMMA parameter)*)? CLOSE_PAREN OPEN_BRACE scope CLOSE_BRACE {
+    methods=[getName getNameIdentifier]
 }
 
-parameter ::= IDENTIFIER type? {
-    methods=[getName getTypeText]
+parameter ::= CONST? type identifier {
+    methods=[getName getNameEl isConst]
 }
 
-type ::= COLON IDENTIFIER
+type ::= identifier
 
-scope ::= (COMMENT|(varDef SEMI)|(defCall SEMI)|(reassign SEMI)|ifDef)*
+scope ::= (COMMENT|(varDef SEMI)|(defCall SEMI)|(reassign SEMI)|ifDef|instanceDef)*
 
-defCall ::= IDENTIFIER OPEN_PAREN (argument (COMMA argument)*)? CLOSE_PAREN
+defCall ::= identifier OPEN_PAREN (argument (COMMA argument)*)? CLOSE_PAREN {
+    methods=[getName getType]
+}
 
 argument ::= expr
 
-reassign ::= IDENTIFIER ASSIGN expr
+reassign ::= identifier ASSIGN expr {
+    methods=[getName]
+}
 
 ifDef ::= IF OPEN_PAREN condition (OR|AND condition)* CLOSE_PAREN OPEN_BRACE scope CLOSE_BRACE (ELSE (ifDef|OPEN_BRACE scope CLOSE_BRACE))?
 

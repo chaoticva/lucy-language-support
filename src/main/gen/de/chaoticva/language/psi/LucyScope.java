@@ -14,6 +14,9 @@ public interface LucyScope extends PsiElement {
   List<LucyIfDef> getIfDefList();
 
   @NotNull
+  List<LucyInstanceDef> getInstanceDefList();
+
+  @NotNull
   List<LucyReassign> getReassignList();
 
   @NotNull

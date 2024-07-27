@@ -11,37 +11,20 @@ import static de.chaoticva.language.psi.LucyTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import de.chaoticva.language.psi.*;
 
-public class LucyDefCallImpl extends ASTWrapperPsiElement implements LucyDefCall {
+public class LucyIdentifierImpl extends ASTWrapperPsiElement implements LucyIdentifier {
 
-  public LucyDefCallImpl(@NotNull ASTNode node) {
+  public LucyIdentifierImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LucyVisitor visitor) {
-    visitor.visitDefCall(this);
+    visitor.visitIdentifier(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof LucyVisitor) accept((LucyVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<LucyArgument> getArgumentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyArgument.class);
-  }
-
-  @Override
-  @NotNull
-  public LucyIdentifier getIdentifier() {
-    return findNotNullChildByClass(LucyIdentifier.class);
-  }
-
-  @Override
-  public String getName() {
-    return LucyPsiImplUtil.getName(this);
   }
 
 }

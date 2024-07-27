@@ -20,7 +20,9 @@
         <lang.documentationProvider language="Lucy" implementationClass="de.chaoticva.language.LucyDocumentationProvider"/>
         <lang.commenter language="Lucy" implementationClass="de.chaoticva.language.LucyCommenter" />
 
+        <codeInsight.parameterNameHints language="Lucy" implementationClass="de.chaoticva.language.LucyParameterHints" />
         <newProjectWizard.language implementation="de.chaoticva.project.wizard.LucyWizard"/>
+        <localInspection groupName="Lucy" displayName="Lucy inspection" implementationClass="de.chaoticva.language.LucyInspection" language="Lucy"/>
     </extensions>
     <applicationListeners>
         <listener class="de.chaoticva.project.LucyPluginComponent" topic="com.intellij.openapi.project.ProjectManagerListener"/>

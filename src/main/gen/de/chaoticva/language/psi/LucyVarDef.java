@@ -5,22 +5,23 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LucyVarDef extends LucyNamedElement {
+public interface LucyVarDef extends PsiElement {
 
   @NotNull
   LucyExpr getExpr();
 
-  @Nullable
+  @NotNull
+  LucyIdentifier getIdentifier();
+
+  @NotNull
   LucyType getType();
 
   String getName();
 
-  String getTypeText();
+  PsiElement getNameEl();
 
   String getValue();
 
-  PsiElement setName(String newName);
-
-  PsiElement getNameIdentifier();
+  boolean isConst();
 
 }

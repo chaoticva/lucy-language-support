@@ -14,7 +14,9 @@ public interface LucyTypes {
   IElementType DEF_DEF = new LucyElementType("DEF_DEF");
   IElementType EXPR = new LucyElementType("EXPR");
   IElementType FACTOR = new LucyElementType("FACTOR");
+  IElementType IDENTIFIER = new LucyElementType("IDENTIFIER");
   IElementType IF_DEF = new LucyElementType("IF_DEF");
+  IElementType INSTANCE_DEF = new LucyElementType("INSTANCE_DEF");
   IElementType OPERATOR = new LucyElementType("OPERATOR");
   IElementType PARAMETER = new LucyElementType("PARAMETER");
   IElementType REASSIGN = new LucyElementType("REASSIGN");
@@ -26,20 +28,22 @@ public interface LucyTypes {
   IElementType ASSIGN = new LucyTokenType("ASSIGN");
   IElementType ASTERISK = new LucyTokenType("ASTERISK");
   IElementType BOOLEAN = new LucyTokenType("BOOLEAN");
+  IElementType CHAR = new LucyTokenType("CHAR");
   IElementType CLOSE_ANGLE = new LucyTokenType("CLOSE_ANGLE");
   IElementType CLOSE_BRACE = new LucyTokenType("CLOSE_BRACE");
   IElementType CLOSE_PAREN = new LucyTokenType("CLOSE_PAREN");
-  IElementType COLON = new LucyTokenType("COLON");
   IElementType COMMA = new LucyTokenType("COMMA");
   IElementType COMMENT = new LucyTokenType("COMMENT");
+  IElementType CONST = new LucyTokenType("CONST");
   IElementType DEF = new LucyTokenType("DEF");
   IElementType ELSE = new LucyTokenType("ELSE");
   IElementType EQUAL = new LucyTokenType("EQUAL");
   IElementType GTE = new LucyTokenType("GTE");
-  IElementType IDENTIFIER = new LucyTokenType("IDENTIFIER");
+  IElementType IDENTIFIER_ = new LucyTokenType("IDENTIFIER_");
   IElementType IF = new LucyTokenType("IF");
   IElementType LTE = new LucyTokenType("LTE");
   IElementType MINUS = new LucyTokenType("MINUS");
+  IElementType NEW = new LucyTokenType("NEW");
   IElementType NOT_EQUAL = new LucyTokenType("NOT_EQUAL");
   IElementType NUMBER = new LucyTokenType("NUMBER");
   IElementType OPEN_ANGLE = new LucyTokenType("OPEN_ANGLE");
@@ -73,8 +77,14 @@ public interface LucyTypes {
       else if (type == FACTOR) {
         return new LucyFactorImpl(node);
       }
+      else if (type == IDENTIFIER) {
+        return new LucyIdentifierImpl(node);
+      }
       else if (type == IF_DEF) {
         return new LucyIfDefImpl(node);
+      }
+      else if (type == INSTANCE_DEF) {
+        return new LucyInstanceDefImpl(node);
       }
       else if (type == OPERATOR) {
         return new LucyOperatorImpl(node);

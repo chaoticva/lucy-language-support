@@ -8,16 +8,19 @@ import com.intellij.psi.PsiElement;
 public interface LucyDefDef extends PsiElement {
 
   @NotNull
+  LucyIdentifier getIdentifier();
+
+  @NotNull
   List<LucyParameter> getParameterList();
 
   @NotNull
   LucyScope getScope();
 
-  @Nullable
+  @NotNull
   LucyType getType();
 
   String getName();
 
-  String getTypeText();
+  PsiElement getNameIdentifier();
 
 }

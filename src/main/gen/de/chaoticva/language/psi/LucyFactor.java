@@ -13,4 +13,10 @@ public interface LucyFactor extends PsiElement {
   @Nullable
   LucyExpr getExpr();
 
+  @Nullable
+  LucyIdentifier getIdentifier();
+
+  @Nullable
+  LucyInstanceDef getInstanceDef();
+
 }

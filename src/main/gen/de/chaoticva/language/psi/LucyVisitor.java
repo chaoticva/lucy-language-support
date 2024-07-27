@@ -31,7 +31,15 @@ public class LucyVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitIdentifier(@NotNull LucyIdentifier o) {
+    visitPsiElement(o);
+  }
+
   public void visitIfDef(@NotNull LucyIfDef o) {
+    visitPsiElement(o);
+  }
+
+  public void visitInstanceDef(@NotNull LucyInstanceDef o) {
     visitPsiElement(o);
   }
 
@@ -56,10 +64,6 @@ public class LucyVisitor extends PsiElementVisitor {
   }
 
   public void visitVarDef(@NotNull LucyVarDef o) {
-    visitNamedElement(o);
-  }
-
-  public void visitNamedElement(@NotNull LucyNamedElement o) {
     visitPsiElement(o);
   }
 

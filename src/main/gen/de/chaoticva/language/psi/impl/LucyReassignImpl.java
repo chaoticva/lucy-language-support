@@ -33,4 +33,15 @@ public class LucyReassignImpl extends ASTWrapperPsiElement implements LucyReassi
     return findNotNullChildByClass(LucyExpr.class);
   }
 
+  @Override
+  @NotNull
+  public LucyIdentifier getIdentifier() {
+    return findNotNullChildByClass(LucyIdentifier.class);
+  }
+
+  @Override
+  public String getName() {
+    return LucyPsiImplUtil.getName(this);
+  }
+
 }

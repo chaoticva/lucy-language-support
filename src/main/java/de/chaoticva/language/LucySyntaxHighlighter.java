@@ -29,6 +29,8 @@ public class LucySyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey PARAMETER = createTextAttributesKey("LUCY_PARAMETER", DefaultLanguageHighlighterColors.PARAMETER);
     public static final TextAttributesKey SEMICOLON = createTextAttributesKey("LUCY_SEMICOLON", DefaultLanguageHighlighterColors.SEMICOLON);
     public static final TextAttributesKey COMMENT = createTextAttributesKey("LUCY_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+    public static final TextAttributesKey TYPE = createTextAttributesKey("LUCY_TYPE", DefaultLanguageHighlighterColors.CONSTANT);
+    public static final TextAttributesKey CLASS = createTextAttributesKey("LUCY_CLASS", DefaultLanguageHighlighterColors.CLASS_NAME);
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("LUCY_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 
     @Override
@@ -54,7 +56,6 @@ public class LucySyntaxHighlighter extends SyntaxHighlighterBase {
                 LucyTypes.OR
         ).contains(tokenType)) return new TextAttributesKey[]{OPERATOR};
         if (Objects.equals(LucyTypes.COMMENT, tokenType)) return new TextAttributesKey[]{COMMENT};
-        if (Objects.equals(LucyTypes.PARAMETER, tokenType)) return new TextAttributesKey[]{PARAMETER};
         if (Objects.equals(LucyTypes.DEF_DEF, tokenType)) return new TextAttributesKey[]{FUNCTION_DECLARATION};
         if (Objects.equals(LucyTypes.DEF_CALL, tokenType)) return new TextAttributesKey[]{FUNCTION_CALL};
         if (Objects.equals(LucyTypes.COMMA, tokenType)) return new TextAttributesKey[]{COMMA};
@@ -66,7 +67,9 @@ public class LucySyntaxHighlighter extends SyntaxHighlighterBase {
                 LucyTypes.VAR,
                 LucyTypes.DEF,
                 LucyTypes.IF,
-                LucyTypes.ELSE
+                LucyTypes.ELSE,
+                LucyTypes.CONST,
+                LucyTypes.NEW
         ).contains(tokenType)) return new TextAttributesKey[]{KEYWORD};
         if (Objects.equals(LucyTypes.IDENTIFIER, tokenType)) return new TextAttributesKey[]{IDENTIFIER};
         if (Objects.equals(TokenType.BAD_CHARACTER, tokenType)) return new TextAttributesKey[]{BAD_CHARACTER};

@@ -28,9 +28,15 @@ public class LucyParameterImpl extends ASTWrapperPsiElement implements LucyParam
   }
 
   @Override
-  @Nullable
+  @NotNull
+  public LucyIdentifier getIdentifier() {
+    return findNotNullChildByClass(LucyIdentifier.class);
+  }
+
+  @Override
+  @NotNull
   public LucyType getType() {
-    return findChildByClass(LucyType.class);
+    return findNotNullChildByClass(LucyType.class);
   }
 
   @Override
@@ -39,8 +45,13 @@ public class LucyParameterImpl extends ASTWrapperPsiElement implements LucyParam
   }
 
   @Override
-  public String getTypeText() {
-    return LucyPsiImplUtil.getTypeText(this);
+  public PsiElement getNameEl() {
+    return LucyPsiImplUtil.getNameEl(this);
+  }
+
+  @Override
+  public boolean isConst() {
+    return LucyPsiImplUtil.isConst(this);
   }
 
 }

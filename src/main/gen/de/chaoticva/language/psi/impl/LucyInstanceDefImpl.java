@@ -11,14 +11,14 @@ import static de.chaoticva.language.psi.LucyTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import de.chaoticva.language.psi.*;
 
-public class LucyVarDefImpl extends ASTWrapperPsiElement implements LucyVarDef {
+public class LucyInstanceDefImpl extends ASTWrapperPsiElement implements LucyInstanceDef {
 
-  public LucyVarDefImpl(@NotNull ASTNode node) {
+  public LucyInstanceDefImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LucyVisitor visitor) {
-    visitor.visitVarDef(this);
+    visitor.visitInstanceDef(this);
   }
 
   @Override
@@ -29,40 +29,14 @@ public class LucyVarDefImpl extends ASTWrapperPsiElement implements LucyVarDef {
 
   @Override
   @NotNull
-  public LucyExpr getExpr() {
-    return findNotNullChildByClass(LucyExpr.class);
+  public List<LucyArgument> getArgumentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LucyArgument.class);
   }
 
   @Override
   @NotNull
   public LucyIdentifier getIdentifier() {
     return findNotNullChildByClass(LucyIdentifier.class);
-  }
-
-  @Override
-  @NotNull
-  public LucyType getType() {
-    return findNotNullChildByClass(LucyType.class);
-  }
-
-  @Override
-  public String getName() {
-    return LucyPsiImplUtil.getName(this);
-  }
-
-  @Override
-  public PsiElement getNameEl() {
-    return LucyPsiImplUtil.getNameEl(this);
-  }
-
-  @Override
-  public String getValue() {
-    return LucyPsiImplUtil.getValue(this);
-  }
-
-  @Override
-  public boolean isConst() {
-    return LucyPsiImplUtil.isConst(this);
   }
 
 }

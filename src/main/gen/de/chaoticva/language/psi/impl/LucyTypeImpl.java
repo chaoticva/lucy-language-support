@@ -27,4 +27,10 @@ public class LucyTypeImpl extends ASTWrapperPsiElement implements LucyType {
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public LucyIdentifier getIdentifier() {
+    return findNotNullChildByClass(LucyIdentifier.class);
+  }
+
 }
